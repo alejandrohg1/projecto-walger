@@ -9,52 +9,30 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-
-import { Client } from "../types/client";
 import { FC } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { addClient, deleteClient, updateClient } from "../api/clientApi";
 import { Product } from "../types/product";
+import { DeleteProduct } from "../api/product";
 
 interface Props {
-  client?: Product | null;
+  product?: Product | null;
   isModal: boolean;
-  setIsModal: (isModal: boolean) => void;
- 
-  clientList: Product[];
-  setClientList: (clientList: Product[]) => void;
-}
 
-export interface FormValues {
-  nombreCliente: string | undefined;
-  apellidoCliente: string | undefined;
-  categoria: string | undefined;
+ handleDeleteProductClose: () => void;
 }
 
 const ModalDelete: FC<Props> = ({
   
-  client,
+  product,
   isModal,
-  setIsModal,
-  clientList,
-  setClientList,
+  handleDeleteProductClose,
 }) => {
  
 
   const onSubmit = async () => {
-    
-    
-    /*
-
-    const response = await deleteClient(client?.idCliente as number);
-    
+    const response = await DeleteProduct(product?.id as number);
     console.log(response)
-    setClientList(clientList.filter((item) => item.idCliente !== client?.idCliente));
-    */
-    setIsModal(false);
+    handleDeleteProductClose();
   };
 
   return (
@@ -71,7 +49,7 @@ const ModalDelete: FC<Props> = ({
         
        
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setIsModal(false)}>
+          <AlertDialogCancel onClick={handleDeleteProductClose}>
             Cancelar
           </AlertDialogCancel>
           <AlertDialogAction

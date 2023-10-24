@@ -11,104 +11,65 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-
-import { Client } from "../types/client";
 import { FC } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { addClient, updateClient } from "../api/clientApi";
 import { Product } from "../types/product";
+import { CreateProduct, UpdateProduct } from "../api/product";
+import { Label } from "@/components/ui/label"
 
 interface Props {
-  client?: Product | null;
+  product?: Product | null;
   isModal: boolean;
-  setIsModal: (isModal: boolean) => void;
+  handleEditProductClose: () => void;
   isEdit: boolean;
-  clientList: Product[];
-  setClientList: (clientList: Product[]) => void;
 }
 
-export interface FormValues {
+export interface ProductFormValues {
   cost: number | string; 
   max: number | string;
   min: number | string;
   name: string | string;
   price: number | string;
   quantity : number  | string;
-  
 }
 
 const Modal: FC<Props> = ({
   isEdit,
-  client,
+  product,
   isModal,
-  setIsModal,
-  clientList,
-  setClientList,
+  handleEditProductClose
 }) => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormValues>(
+  } = useForm<ProductFormValues>(
     {
       values: {
-        name: isEdit ? client?.name ?? '' : '',
-        price: isEdit ? client?.price ?? '' : '',
-        cost: isEdit ? client?.cost  ?? '' : '',
-        quantity: isEdit ? client?.quantity ??  '' : '',
-        min: isEdit ? client?.minQuantity ?? '' : '',
-        max: isEdit ? client?.maxQuantity ?? '' : '',
+        name: isEdit ? product?.name ?? '' : '',
+        price: isEdit ? product?.price ?? '' : '',
+        cost: isEdit ? product?.cost  ?? '' : '',
+        quantity: isEdit ? product?.quantity ??  '' : '',
+        min: isEdit ? product?.minQuantity ?? '' : '',
+        max: isEdit ? product?.maxQuantity ?? '' : '',
       }
     }
   );
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
     
     if (isEdit) {
-      /*
-      const response = await updateClient({
-        ...data,
-        idCliente: client?.idCliente,
-      });
+
+      const response = await UpdateProduct(product?.id as number, data);
       
       console.log(response)
-*/
-      setClientList(
-        clientList.map((cliente) => {
-          if (cliente.codProd === client?.codProd) {
-            return {
-              ...client,
-              cost : data.cost as number,
-              max: data.max as number,
-              min: data.min as number,
-              name : data.name as string,
-              price: data.price as number,
-              quantity: data.quantity as number,
-              
-              
-
-            };
-          }
-          return cliente;
-        })
-      );
     } else {
-      //await addClient(data);
-      const newClient = {
-        codProd: clientList.length +1,
-        cost : data.cost as number,
-        maxQuantity: data.max as number,
-        minQuantity: data.min as number,
-        name : data.name as string,
-        price: data.price as number,
-        quantity: data.quantity as number,
-        status: true
-      } as Product;
-      setClientList([newClient, ...clientList]);
+
+      await CreateProduct(data);
     }
 
-    setIsModal(false);
+    handleEditProductClose();
     
   };
 
@@ -124,6 +85,7 @@ const Modal: FC<Props> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className='flex flex-col gap-4'>
+        <Label htmlFor="name">Nombre Producto</Label>
           <Input
             type="text"
             placeholder='Nombre del producto'
@@ -133,6 +95,8 @@ const Modal: FC<Props> = ({
           {errors.name && (
             <span className='text-red-500'>Este campo es requerido</span>
           )}
+
+          <Label htmlFor="price">Precio</Label>
           <Input
             type='text'
             placeholder='Precio'
@@ -141,6 +105,8 @@ const Modal: FC<Props> = ({
           {errors.price && (
             <span className='text-red-500'>Este campo es requerido</span>
           )}
+
+          <Label htmlFor="cost">Costo</Label>
           <Input
             type='text'
             placeholder='Costo'
@@ -149,7 +115,9 @@ const Modal: FC<Props> = ({
           {errors.cost && (
             <span className='text-red-500'>Este campo es requerido</span>
           )}
-            <Input
+
+          <Label htmlFor="quantity">Cantidad</Label>
+          <Input
             type='text'
             placeholder='Cantida Actual'
             {...register("quantity", { required: true })}
@@ -157,6 +125,8 @@ const Modal: FC<Props> = ({
           {errors.min && (
             <span className='text-red-500'>Este campo es requerido</span>
           )}
+
+          <Label htmlFor="min">Cantidad Minima</Label>
           <Input
             type='text'
             placeholder='Cantida minima'
@@ -165,6 +135,8 @@ const Modal: FC<Props> = ({
           {errors.min && (
             <span className='text-red-500'>Este campo es requerido</span>
           )}
+
+          <Label htmlFor="max">Cantidad Maxima</Label>
            <Input
             type='text'
             placeholder='Cantida maxima'
@@ -175,7 +147,7 @@ const Modal: FC<Props> = ({
           )}
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setIsModal(false)}>
+          <AlertDialogCancel onClick={handleEditProductClose}>
             Cancelar
           </AlertDialogCancel>
           <AlertDialogAction

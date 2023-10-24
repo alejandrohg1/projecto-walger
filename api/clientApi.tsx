@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../constants/constants";
 import { Client } from "../types/client";
-import { FormValues } from "../components/Modal";
+import { ClientFormValues } from "../components/Modal";
 
 
 export const getClient = async () =>{
@@ -10,7 +10,7 @@ export const getClient = async () =>{
 }
 
 
-export const addClient = async (data: FormValues) =>{
+export const addClient = async (data: ClientFormValues) =>{
     const response = await axios.post(`${BASE_URL}/Cliente/Guardar`, data);
     return response.data;
 }

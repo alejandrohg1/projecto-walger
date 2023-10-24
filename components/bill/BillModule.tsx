@@ -41,7 +41,7 @@ function BillModule({ products, handleDeleteProduct,handleEditProduct,clearProdu
 
       if(products.some(product => {
 
-         if( product.currentQuantity - product.quantity <= product.minQuantity ){
+         if( product.quantity - product.currentQuantity <= product.minQuantity ){
             alert (`El producto ${product.name} quedara por debajo del minimo`);
             return true;
          }
@@ -61,12 +61,6 @@ function BillModule({ products, handleDeleteProduct,handleEditProduct,clearProdu
       
           quantity: product.currentQuantity
         })
-
-        
-
-        
-  
-       
       }))
       
       
