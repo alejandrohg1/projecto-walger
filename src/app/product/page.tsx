@@ -148,11 +148,7 @@ export default function ProductsPage() {
 
   return (
     <main className='flex min-h-screen flex-col'>
-      <div className='p-10 bg-sky-900 '>
-        <h2 className='text-2xl font-bold text-white'>
-          Conexion de prueba de api a net core
-        </h2>
-      </div>
+    
       <div className='p-16'>
         <div className='pb-10 flex gap-5'>
           <Input
