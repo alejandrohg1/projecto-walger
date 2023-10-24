@@ -42,7 +42,7 @@ export default function ProductsPage() {
 
   const columns: ColumnDef<Product>[] = [
     {
-      accessorKey: "codProd",
+      accessorKey: "id",
       header: "Codigo Producto",
     },
     {
@@ -62,11 +62,11 @@ export default function ProductsPage() {
       header: "Cantidad",
     },
     {
-      accessorKey: "min",
+      accessorKey: "minQuantity",
       header: "Cantidad Minima",
     },
     {
-      accessorKey: "max",
+      accessorKey: "maxQuantity",
       header: "Cantidad Maxima",
     },
     {
@@ -107,6 +107,7 @@ export default function ProductsPage() {
       ),
     },
   ];
+
   const table = useReactTable({
     columns: columns,
     data: data,

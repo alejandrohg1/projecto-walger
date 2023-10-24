@@ -15,21 +15,51 @@ import { Button } from "@/components/ui/button";
 
 import BillRowBody from "./BillRowBody";
 import { ProductState } from "../../types/product";
+import axios from "axios";
 
 
 interface Props {
   products: ProductState[];
   handleDeleteProduct: (product: ProductState) => void;
   handleEditProduct?: (product: ProductState) => void;
+  clearProducts : () => void
   
 }
 
-function BillModule({ products, handleDeleteProduct,handleEditProduct }: Props) {
+function BillModule({ products, handleDeleteProduct,handleEditProduct,clearProducts }: Props) {
   const date = new Date().toLocaleDateString();
   const [isAlert, setIsAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleBuy = () => {
+ 
+
+  const handleBuy = async() => {
+    setLoading(true);
+    if(products.length === 0) return alert('No hay productos agregados');
+
+    const billResponse = await axios.post('https://localhost:7219/api/bills')
+    const bill = billResponse.data;
+
+    console.log(bill)
+
+    Promise.all(products.map(async(product) => {
+      const response = await axios.post(`https://localhost:7219/api/bills/${bill.bill.id}/add-detail/${product.id}` ,{
+    
+        quantity: product.currentQuantity
+      })
+
+      console.log(response.data)
+    }))
+
+    
+
     setIsAlert(true);
+    clearProducts();
+
+
+    setLoading(false);
+    
+
   };
 
   return (
@@ -66,7 +96,7 @@ function BillModule({ products, handleDeleteProduct,handleEditProduct }: Props) 
           <TableBody>
             {products.map((product) => (
               <BillRowBody
-                key={product.codProd}
+                key={product.id}
                 product={product}
                 handleDeleteProduct={handleDeleteProduct}
                 handleEditProduct = {handleEditProduct}
@@ -94,7 +124,8 @@ function BillModule({ products, handleDeleteProduct,handleEditProduct }: Props) 
           onClick={handleBuy}
           className='mt-10 bg-teal-600'
           variant={"default"}
-          disabled={products.length === 0}
+          disabled={products.length === 0 || loading}
+            
         >
           Finalizar compra
         </Button>

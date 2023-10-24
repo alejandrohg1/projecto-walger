@@ -57,8 +57,8 @@ const Modal: FC<Props> = ({
         price: isEdit ? client?.price ?? '' : '',
         cost: isEdit ? client?.cost  ?? '' : '',
         quantity: isEdit ? client?.quantity ??  '' : '',
-        min: isEdit ? client?.min ?? '' : '',
-        max: isEdit ? client?.max ?? '' : '',
+        min: isEdit ? client?.minQuantity ?? '' : '',
+        max: isEdit ? client?.maxQuantity ?? '' : '',
       }
     }
   );
@@ -98,8 +98,8 @@ const Modal: FC<Props> = ({
       const newClient = {
         codProd: clientList.length +1,
         cost : data.cost as number,
-        max: data.max as number,
-        min: data.min as number,
+        maxQuantity: data.max as number,
+        minQuantity: data.min as number,
         name : data.name as string,
         price: data.price as number,
         quantity: data.quantity as number,

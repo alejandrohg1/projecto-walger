@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { getClient } from "../../api/clientApi";
+
 import {
   Table,
   TableBody,
@@ -12,9 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Client } from '../../types/client';
+
 import {
-  ColumnDef,
+
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -25,58 +25,22 @@ import {
 } from "@tanstack/react-table";
 
 
-import { Button } from "@/components/ui/button"
-import Modal from '../../components/Modal';
-import ModalDelete from '../../components/ModalDelete';
 
-export default function Home() {
-  const [data, setData] = useState<Client[]>([]);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
+interface Props {
+  data: any;
+  columns: any;
+}
+
+
+export default function BasicTable({ data, columns}: Props) {
+
+  
+ 
 
   const [filtering, setFiltering] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const columns: ColumnDef<Client>[] = [
-    {
-      accessorKey: "idCliente",
-      header: "Id",
-    },
-    {
-      accessorKey: "categoria",
-      header: "Categoria",
-    },
-    {
-      accessorKey: "nombreCliente",
-      header: "Nombre",
-    },
-    {
-      accessorKey: "apellidoCliente",
-      header: "Apellido",
-    },
-    {
-      accessorKey: "acciones",
-      header: "Acciones",
-      cell: (info) => (
-        <div className='flex justify-center items-center gap-2'>
-          <button
-            className='bg-blue-500 text-white p-2 rounded-md'
-            onClick={() =>{ handleEdit(info.row.original)}}
-          >
-            Editar
-          </button>
-          <button
-            className='bg-red-500 text-white p-2 rounded-md'
-            onClick={() => handleDelete(info.row.original)}
-          >
-            Eliminar
-          </button>
-        </div>
-      ),
-    },
-  ];
+  
   const table = useReactTable({
     columns: columns,
     data: data,
@@ -93,48 +57,23 @@ export default function Home() {
     onGlobalFilterChange: setFiltering,
   });
 
-  useEffect(() => {
-    const populateData = async () => {
-      const response = await getClient();
-      if (!response) return console.log("error");
-      setData(response.response);
-    };
-
-    populateData();
-  }, []);
-
-  const handleEdit = (client: Client) => {
-    setSelectedClient(client);
-    setIsModalOpen(true);
-    setIsEdit(true);
-    
-
-  };
-
-  const handleDelete = (client: Client) => {
-    setSelectedClient(client);
-    
-    setIsDelete(true);
-  };
+ 
 
   return (
     <main className='flex min-h-screen flex-col'>
-     
+    
       <div className='p-16'>
         <div className='pb-10 flex gap-5'>
           <Input
             className='max-w-[30rem]'
             type='text'
-            placeholder='Buscar Cliente'
+            placeholder='Buscar Producto'
             value={filtering}
             onChange={(e) => {
               setFiltering(e.target.value);
             }}
           />
-          <Button variant="default" className="bg-sky-900" onClick={()=>{
-            setIsModalOpen(true);
-            setIsEdit(false);
-          }}>Añadir Cliente</Button>
+       
         </div>
 
         <div>
@@ -189,8 +128,7 @@ export default function Home() {
           </Table>
         </div>
       </div>
-     <Modal setClientList={setData} clientList={data} isEdit={isEdit} isModal={isModalOpen} client={selectedClient} setIsModal={setIsModalOpen}   />
-     <ModalDelete setClientList={setData} clientList={data} client={selectedClient} setIsModal={setIsDelete} isModal={isDelete}  />
+  
     </main>
   );
 }

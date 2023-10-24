@@ -1,11 +1,11 @@
 export interface Product{
-    codProd: number
+    id: number
     name:string
     price:number
     cost: number
     quantity: number,
-    min: number
-    max: number
+    minQuantity: number
+    maxQuantity: number
     status: boolean
 }
 

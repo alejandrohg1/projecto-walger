@@ -25,7 +25,7 @@ function ProductCard({ product,handleAddProduct }: Props) {
       <div className='flex justify-between items-center pt-3 '>
         <div>
           <p className='text-sm font-light text-gray-500'>{`Cantidad: ${product.quantity}`}</p>
-          <p className='text-sm font-light text-gray-500'>{`Min: ${product.min} Max: ${product.max}`}</p>
+          <p className='text-sm font-light text-gray-500'>{`Min: ${product.minQuantity} Max: ${product.maxQuantity}`}</p>
         </div>
         <Button variant='default' className='bg-teal-500 w-4 h-7' onClick={handleAdd}>
           +

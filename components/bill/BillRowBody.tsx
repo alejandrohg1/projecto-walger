@@ -36,8 +36,8 @@ function BillRowBody({
   };
 
   return (
-    <TableRow key={product.codProd}>
-      <TableCell key={product.codProd}>{product.name}</TableCell>
+    <TableRow key={product.id}>
+      <TableCell key={product.id}>{product.name}</TableCell>
       <TableCell>{product.price}</TableCell>
       <TableCell>
         <Input

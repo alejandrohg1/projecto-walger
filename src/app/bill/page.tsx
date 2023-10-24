@@ -1,42 +1,50 @@
-'use client'
+"use client";
 
 import React, { useState } from "react";
-import SideMenu from '../../../components/bill/SideMenu';
-import BillModule from '../../../components/bill/BillModule';
-import {  ProductState } from "../../../types/product";
+import SideMenu from "../../../components/bill/SideMenu";
+import BillModule from "../../../components/bill/BillModule";
+import { ProductState } from "../../../types/product";
 
 function Page() {
-
-  const [bill,setBill] = useState({})
-  const [billDetails,setBillDetails] = useState<ProductState[]>([])
+  const [bill, setBill] = useState({});
+  const [billDetails, setBillDetails] = useState<ProductState[]>([]);
 
   const handleAddProduct = (product: ProductState) => {
-    setBillDetails([...billDetails,product])
-  }
+    if (billDetails.find((item) => item.id === product.id))
+      return alert("El producto ya se encuentra en la lista");
+    setBillDetails([...billDetails, product]);
+  };
 
   const handleDeleteProduct = (product: ProductState) => {
-    setBillDetails(billDetails.filter((item) => item.codProd !== product.codProd))
-  }
+    setBillDetails(billDetails.filter((item) => item.id !== product.id));
+  };
 
   const handleEditProduct = (product: ProductState) => {
-    setBillDetails(billDetails.map((item) => item.codProd === product.codProd ? product : item))
-  }
+    setBillDetails(
+      billDetails.map((item) => (item.id === product.id ? product : item))
+    );
+  };
+
+  const clearProducts = () => {
+    setBillDetails([]);
+  };
 
   return (
     <main className='flex min-h-screen flex-col'>
-      <div className='p-10 bg-sky-900 '>
-        <h2 className='text-2xl font-bold text-white'>
-          Conexion de prueba de api a net core
-        </h2>
+     
+      <div className='flex'>
+        <SideMenu
+          setDetails={setBillDetails}
+          billDetails={billDetails}
+          handleAddProduct={handleAddProduct}
+        />
+        <BillModule
+          products={billDetails}
+          handleDeleteProduct={handleDeleteProduct}
+          handleEditProduct={handleEditProduct}
+          clearProducts={clearProducts}
+        />
       </div>
-      <div className="flex" >
-      
-        <SideMenu setDetails={setBillDetails} billDetails={billDetails} handleAddProduct={handleAddProduct} />
-        <BillModule products={billDetails} handleDeleteProduct ={handleDeleteProduct} handleEditProduct={handleEditProduct}/>
-        
-      </div>
-
-
     </main>
   );
 }

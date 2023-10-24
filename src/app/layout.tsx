@@ -16,7 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+      <div className='p-10 bg-sky-900 '>
+        <h2 className='text-2xl font-bold text-white'>
+          Conexion de prueba de api a net core
+        </h2>
+      </div>
+        {children}
+        </body>
      
     </html>
   )
