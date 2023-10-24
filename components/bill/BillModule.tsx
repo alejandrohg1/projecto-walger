@@ -34,30 +34,55 @@ function BillModule({ products, handleDeleteProduct,handleEditProduct,clearProdu
  
 
   const handleBuy = async() => {
-    setLoading(true);
-    if(products.length === 0) return alert('No hay productos agregados');
 
-    const billResponse = await axios.post('https://localhost:7219/api/bills')
-    const bill = billResponse.data;
+    try{
+      setLoading(true);
+      if(products.length === 0) return alert('No hay productos agregados');
 
-    console.log(bill)
+      if(products.some(product => {
 
-    Promise.all(products.map(async(product) => {
-      const response = await axios.post(`https://localhost:7219/api/bills/${bill.bill.id}/add-detail/${product.id}` ,{
-    
-        quantity: product.currentQuantity
-      })
+         if( product.currentQuantity - product.quantity <= product.minQuantity ){
+            alert (`El producto ${product.name} quedara por debajo del minimo`);
+            return true;
+         }
 
-      console.log(response.data)
-    }))
+         
+      })) return setLoading(false); 
+      
+      const billResponse = await axios.post('https://localhost:7219/api/bills')
+      const bill = billResponse.data;
+  
+      
+      
+      Promise.allSettled(products.map(async(product: ProductState) => {
 
-    
 
-    setIsAlert(true);
-    clearProducts();
+        const response = await axios.post(`https://localhost:7219/api/bills/${bill.bill.id}/add-detail/${product.id}` ,{
+      
+          quantity: product.currentQuantity
+        })
 
+        
 
-    setLoading(false);
+        
+  
+       
+      }))
+      
+      
+  
+      setIsAlert(true);
+      clearProducts();
+  
+  
+      setLoading(false);
+    }catch(error){
+      console.log(error);
+      setIsAlert(false);
+      setLoading(false);
+
+    }
+   
     
 
   };
@@ -66,7 +91,7 @@ function BillModule({ products, handleDeleteProduct,handleEditProduct,clearProdu
     <div className='p-10 w-full  '>
       <h2 className='text-2xl font-medium'> Factura </h2>
       <h3 suppressHydrationWarning>{date}</h3>
-      {isAlert && (
+      {(isAlert && products.length === 0 ) &&  (
         <Alert className='mt-5'>
           <AlertTitle className='flex justify-between'>
             Compra Realizada

@@ -23,9 +23,9 @@ export default function RootLayout({
           Conexion de prueba de api a net core
         </h2>
         <div className='flex gap-2'> 
-        <Link className='text-white font-medium' href="/product"  >Productos</Link>
-        <Link className='text-white font-medium' href="/bill" > Hacer Factura</Link>
-        <Link  className='text-white font-medium'href="/bill-list" > Facturas</Link>
+        <Link className='text-white font-medium underline' href="/product"  >Productos</Link>
+        <Link className='text-white font-medium underline' href="/bill" > Hacer Factura</Link>
+        <Link  className='text-white font-medium underline'href="/bill-list" > Facturas</Link>
         </div>
        
 
