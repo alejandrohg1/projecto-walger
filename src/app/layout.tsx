@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,10 +18,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div className='p-10 bg-sky-900 '>
+      <div className='p-10 bg-sky-900 flex justify-between '>
         <h2 className='text-2xl font-bold text-white'>
           Conexion de prueba de api a net core
         </h2>
+        <div className='flex gap-2'> 
+        <Link className='text-white font-medium' href="/product"  >Productos</Link>
+        <Link className='text-white font-medium' href="/bill" > Hacer Factura</Link>
+        <Link  className='text-white font-medium'href="/bill-list" > Facturas</Link>
+        </div>
+       
+
       </div>
         {children}
         </body>

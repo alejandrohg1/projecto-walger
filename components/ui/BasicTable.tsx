@@ -67,7 +67,7 @@ export default function BasicTable({ data, columns}: Props) {
           <Input
             className='max-w-[30rem]'
             type='text'
-            placeholder='Buscar Producto'
+            placeholder='Buscar '
             value={filtering}
             onChange={(e) => {
               setFiltering(e.target.value);
@@ -78,7 +78,7 @@ export default function BasicTable({ data, columns}: Props) {
 
         <div>
           <Table>
-            <TableCaption>Lista de clientes.</TableCaption>
+           
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
