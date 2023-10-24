@@ -27,7 +27,7 @@ interface Props {
   setClientList: (clientList: Client[]) => void;
 }
 
-export interface FormValues {
+export interface ClientFormValues {
   nombreCliente: string | undefined;
   apellidoCliente: string | undefined;
   categoria: string | undefined;
@@ -46,7 +46,7 @@ const Modal: FC<Props> = ({
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<ClientFormValues>({
     values: {
       nombreCliente: isEdit ? client?.nombreCliente : "",
       apellidoCliente: isEdit ? client?.apellidoCliente : "",
@@ -54,7 +54,7 @@ const Modal: FC<Props> = ({
     },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ClientFormValues> = async (data) => {
     if (isEdit) {
       const response = await updateClient({
         ...data,

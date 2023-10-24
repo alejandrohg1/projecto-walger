@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { getClient } from "../../../api/clientApi";
 import {
   Table,
   TableBody,
@@ -12,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Client } from "../../../types/client";
 import {
   ColumnDef,
   SortingState,
@@ -26,17 +24,16 @@ import {
 
 import { Button } from "@/components/ui/button";
 import ModalProduct from "../../../components/ModalProduct";
-import ModalDelete from "../../../components/ModalDeleteProduct";
-import { products } from "../../../faker/faker";
+import ModalDelete from '../../../components/ModalDeleteProduct';
 import { Product } from "../../../types/product";
+import { GetProduct } from "../../../api/product";
 
 export default function ProductsPage() {
-  const [data, setData] = useState<Product[]>(products);
+  const [data, setData] = useState<Product[]>([]);
   const [selectedClient, setSelectedClient] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-
   const [filtering, setFiltering] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -70,16 +67,16 @@ export default function ProductsPage() {
       header: "Cantidad Maxima",
     },
     {
-      accessorKey: "status",
+      accessorKey: "deleted",
       header: "Estado",
       cell: (info) => (
         <div className='flex justify-center items-center'>
           <h2
             className={
-              info.row.original.status ? "text-green-500" : "text-red-500"
+              info.row.original.status ? "text-red-500" : "text-green-500"
             }
           >
-            {info.row.original.status ? "Activo" : "Inactivo"}
+            {info.row.original.status ? "Inactivo" : "Activo" }
           </h2>
         </div>
       ),
@@ -126,13 +123,26 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const populateData = async () => {
-      const response = await getClient();
+      const response = await GetProduct();
       if (!response) return console.log("error");
-      setData(response.response);
+      console.log(response);
+      setData(response);
     };
 
     populateData();
   }, []);
+
+  const populateData = async () => {
+    const response = await GetProduct();
+    if (!response) return console.log("error");
+    console.log(response);
+    setData(response);
+  };
+
+  const handleAddProduct = () => {
+    setIsModalOpen(true);
+    setIsEdit(false);
+  };
 
   const handleEdit = (client: Product) => {
     setSelectedClient(client);
@@ -140,11 +150,21 @@ export default function ProductsPage() {
     setIsEdit(true);
   };
 
+  const handleEditClose = () => {
+    setIsModalOpen(false);
+    setIsEdit(false);
+    populateData();
+  }
+
   const handleDelete = (client: Product) => {
     setSelectedClient(client);
 
     setIsDelete(true);
   };
+
+  const handleDeleteClose = () => {
+    setIsDelete(false);
+  }
 
   return (
     <main className='flex min-h-screen flex-col'>
@@ -163,10 +183,7 @@ export default function ProductsPage() {
           <Button
             variant='default'
             className='bg-sky-900'
-            onClick={() => {
-              setIsModalOpen(true);
-              setIsEdit(false);
-            }}
+            onClick={handleAddProduct}
           >
             Añadir Producto
           </Button>
@@ -174,7 +191,7 @@ export default function ProductsPage() {
 
         <div>
           <Table>
-            <TableCaption>Lista de clientes.</TableCaption>
+            <TableCaption>Lista de Productos.</TableCaption>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -225,19 +242,15 @@ export default function ProductsPage() {
         </div>
       </div>
       <ModalProduct
-        setClientList={setData}
-        clientList={data}
         isEdit={isEdit}
         isModal={isModalOpen}
-        client={selectedClient}
-        setIsModal={setIsModalOpen}
+        product={selectedClient}
+        handleEditProductClose={handleEditClose}
       />
       <ModalDelete
-        setClientList={setData}
-        clientList={data}
-        client={selectedClient}
-        setIsModal={setIsDelete}
+        product={selectedClient}
         isModal={isDelete}
+        handleDeleteProductClose={handleDeleteClose}
       />
     </main>
   );
