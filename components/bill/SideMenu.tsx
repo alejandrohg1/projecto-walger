@@ -38,7 +38,7 @@ function SideMenu({setDetails,billDetails,handleAddProduct}: Props) {
       <div className='flex flex-col gap-3 p-5 border-b-2'>
         <h2 className='text-2xl'>Productos</h2>
         <div className='flex '>
-          <Input type='text' placeholder='Buscar...' />
+        
         </div>
       </div>
 
